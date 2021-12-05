@@ -47,6 +47,7 @@ foreach ($dataProvider->models as $model) {
             
         echo "</div>";
         echo "<div class='panel-body'><p>{$model->title}</p>";
+        echo Html::a('Редактировать', ['learn/update-note', 'id' => $model->id], ['class'=>'btn btn-danger pull-right', 'target' => '_blank']);
         echo "</div>";
     echo "</div>";
 }

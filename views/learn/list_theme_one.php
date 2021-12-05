@@ -44,11 +44,10 @@ foreach ($dataProvider->models as $model) {
             //echo "";
             echo "<h3 class ='panel-title'><input class='form-check-input' type='checkbox' name='selection[]' value='{$model->id}'>" . Html::a('', Url::to(['learn/note-update', 'id' => $model->id])) . " <b>{$model->last_update}</b> - Count = <b>{$model->count}</b></h3>";
             echo Html::a($model->getLearn()->title, $model->getLearn()->link, ['target'=>'_blank', 'style' => 'background-color:white']);
-            
         echo "</div>";
-        echo "<div class='panel-body'><p>{$model->title}</p>";
+        echo "<div class='panel-body'><p>{$model->title}</p>"; 
+        echo Html::a('Редактировать', ['learn/update-note', 'id' => $model->id], ['class'=>'btn btn-danger pull-right', 'target' => '_blank']);
         echo "</div>";
-    echo "</div>";
 }
 ?>
 

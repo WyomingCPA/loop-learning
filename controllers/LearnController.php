@@ -104,6 +104,17 @@ class LearnController extends Controller
             'model' => $model,
         ]);
     }
+    public function actionUpdateNote($id)
+    {
+        $model = LoopNote::find()->where(['id' => $id])->one();
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
+        }
+
+        return $this->render('update-note', [
+            'model' => $model,
+        ]);
+    }
 
     /**
      * Deletes an existing LoopLearn model.
