@@ -32,7 +32,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' => $searchModel->categoriesList(),
                 'value' => function ($data) {
                     $categoryName = LearnSearch::getCategoryName($data->category_id);
-                    return $categoryName->title;
+                    if (isset($categoryName->title))
+                    {
+                        return $categoryName->title;
+                    }
                 },
             ],
             'title',
@@ -57,7 +60,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
 
                     return Html::a(Html::encode($linkText), ['learn/list-note', 'id_learn' => $data->id], ['target'=>'_blank']);
-                },                
+                },   
+                'enableSorting' => TRUE,             
                 'format' => 'raw',
             ],
             'count',
