@@ -51,7 +51,7 @@ class LearnSearch extends LoopLearn
         {
             $list_id[] = $item['id'];
         }
-        $query = LoopLearn::find()->where(['id'=>$list_id]);
+        $query = LoopLearn::find(['id'=>$list_id]);
 
         // add conditions that should always apply here
 
