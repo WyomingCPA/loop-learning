@@ -43,7 +43,15 @@ class LearnSearch extends LoopLearn
      */
     public function search($params)
     {
-        $query = LoopLearn::find();
+        //Поулчаем все акивные категорий
+        $list_category = LoopCategory::find()->where(['status' => 1])->select(['id'])->asArray()->all();
+
+        $list_id = [];
+        foreach ($list_category as $item)
+        {
+            $list_id[] = $item['id'];
+        }
+        $query = LoopLearn::find()->where(['id'=>$list_id]);
 
         // add conditions that should always apply here
 
@@ -75,7 +83,7 @@ class LearnSearch extends LoopLearn
 
     public function categoriesList(): array
     {
-        return ArrayHelper::map(LoopCategory::find()->orderBy('title')->asArray()->all(), 'id', 'title');
+        return ArrayHelper::map(LoopCategory::find()->where(['status' => 1])->orderBy('title')->asArray()->all(), 'id', 'title');
     }
 
     public static function getCategoryName($id_category)
