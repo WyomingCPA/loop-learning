@@ -375,8 +375,10 @@ class LearnController extends Controller
             ->where(['is', 'last_update', new \yii\db\Expression('null')])
             ->orWhere(['<=', 'last_update', $delta_from])->one();
 
-
-        $queryNotes = $model->getNotes($model->id);
+        if (!empty($model))
+        {
+            $queryNotes = $model->getNotes($model->id);
+        }      
         $provider = new ActiveDataProvider([
             'query' => $queryNotes,
             'pagination' => [
