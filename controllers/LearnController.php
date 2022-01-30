@@ -363,6 +363,45 @@ class LearnController extends Controller
         ]);
     }
 
+    public function actionRandomNote($id_category)
+    {
+        $category = $this->findModelCategory($id_category);
+        $learns = $category->getLearns($category->id);
+
+        $list_id_notes = [];
+
+        foreach ($learns->orderBy('last_update ASC')->all() as $learn) {
+            if ($learn != null) {
+                $isCount = $learn->getNotesCount($learn->id);
+                if ($isCount != 0) {
+                    $list_note = $learn->getNotes($learn->id);
+                    foreach ($list_note->orderBy('last_update ASC')->all() as $value) {
+                        $list_id_notes[] = $value->id;
+                    }
+                    break;
+                }
+            }
+        }
+
+        $query = LoopNote::find()->where(['in', 'id', $list_id_notes])->orderBy(new Expression('rand()'));
+        $provider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 20,
+            ],
+            'sort' => [
+                'defaultOrder' => [
+                    'last_update' => SORT_ASC,
+                ]
+            ],
+        ]);
+        return $this->render('random_note', [
+            'model' => $learn,
+            'dataProvider' => $provider,
+            'category' => $category,
+        ]);
+    }
+
     public function actionRandomRepeat($id_category)
     {
         $time_from = strtotime('-10 day', time());

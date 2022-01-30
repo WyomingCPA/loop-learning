@@ -12,6 +12,7 @@ use yii\helpers\Html;
                     <?= Html::a($item['title'] . ' List', ['/learn/list-note-detail', 'id_category' => $item['id']], ['class'=>'btn btn-info', 'role' => 'button']); ?>
                     <?= Html::a($item['title'] . ' One Note', ['/learn/list-note-one', 'id_category' => $item['id']], ['class'=>'btn btn-success', 'role' => 'button']); ?>
                     <?= Html::a($item['title'] . ' Groups Theme', ['/learn/list-theme-one', 'id_category' => $item['id']], ['class'=>'btn btn-warning', 'role' => 'button']); ?>
+                    <?= Html::a($item['title'] . ' Random Note', ['/learn/random-note', 'id_category' => $item['id']], ['class'=>'btn btn-danger', 'role' => 'button']); ?>
                 </li>
   
             <?php
