@@ -370,7 +370,7 @@ class LearnController extends Controller
 
         $list_id_notes = [];
 
-        foreach ($learns->orderBy('last_update ASC')->all() as $learn) {
+        foreach ($learns->orderBy(new Expression('rand()'))->all() as $learn) {
             if ($learn != null) {
                 $isCount = $learn->getNotesCount($learn->id);
                 if ($isCount != 0) {
