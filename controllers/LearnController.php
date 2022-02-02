@@ -216,8 +216,28 @@ class LearnController extends Controller
     public function actionListNoteCategory()
     {
         $category = LoopCategory::find()->orderBy('parent_id ASC, id ASC')->where(['<>', 'status', '0'])->asArray()->all();
+        $newCategoryList = []; 
+        foreach ($category as $item)
+        {
+            $listLearn = LoopLearn::find()->where(['=', 'category_id', $item['id']])->asArray()->all();
+            $count_repeat_summ = 0;
+            foreach ($listLearn as $itemLearn)
+            {
+                //$listNote = LoopNote::find()->where(['=', 'learn_id', $itemLearn['id']])->asArray()->all();
+                $countNote = LoopNote::find()->where(['=', 'learn_id', $itemLearn['id']])->sum('count');
+                if (!empty($countNote))
+                {
+                    $count_repeat_summ += $countNote;
+                }
+         
+
+            }
+            $item['count_repeat_summ'] = $count_repeat_summ;
+            $newCategoryList [] = $item;
+        }
+        array_multisort(array_column($newCategoryList, 'count_repeat_summ'), SORT_DESC, $newCategoryList);
         return $this->render('list-note-category', [
-            'category' => $category,
+            'category' => $newCategoryList,
         ]);
     }
 
