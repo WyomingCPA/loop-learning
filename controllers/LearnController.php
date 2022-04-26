@@ -19,6 +19,8 @@ use yii\db\ActiveQuery;
 
 use yii\web\UploadedFile;
 
+use GuzzleHttp\Exception\ClientException;
+
 /**
  * LearnController implements the CRUD actions for LoopLearn model.
  */
@@ -229,8 +231,6 @@ class LearnController extends Controller
                 {
                     $count_repeat_summ += $countNote;
                 }
-         
-
             }
             $item['count_repeat_summ'] = $count_repeat_summ;
             $newCategoryList [] = $item;
@@ -523,6 +523,31 @@ class LearnController extends Controller
         }
 
         return $this->redirect(['list-note-category',]);
+    }
+    public function actionGetWords($id)
+    {
+        $model = LoopNote::findOne((int)$id);
+        $text = strip_tags($model->title);
+        $text = trim(preg_replace('/\s\s+/', '', $text));
+        $text = trim(preg_replace('/[0-9]+/', '', $text));
+        $str_arr = explode(' ', $text);
+        $result = array_unique($str_arr);
+        $list_translation = '';
+        foreach ($result as $value)
+        {
+            $client = new \GuzzleHttp\Client();
+            try {
+                $response = $client->request('GET', 'http://eng.simpleitrunner.ru/api/wordrests/search?word=' . $value);
+                $json = $response->getBody()->getContents();
+                $json_dec = json_decode($json);
+                $list_translation  .= $json_dec[0]->word .' = '.  $json_dec[0]->translation . '</br>';
+            } catch (ClientException $e) {
+
+            }
+            
+        }
+        echo $list_translation;
+        //echo json_encode(array('status' => $list_translation,));
     }
 
     /**
