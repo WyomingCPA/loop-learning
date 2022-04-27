@@ -66,6 +66,7 @@ $this->params['breadcrumbs'][] = $this->title;
     echo "<div id='{$model->id}' class='get-word btn btn-info pull-right'>Получить слова</div>";
     echo Html::a('Редактировать', ['learn/update-note', 'id' => $model->id], ['class' => 'btn btn-danger pull-right', 'target' => '_blank']);
     echo "</div>";
+    echo "</div>";
   }
 
   ?>
@@ -83,7 +84,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <button type="button" class="close" data-dismiss="modal">&times;</button>
         <h4 class="modal-title">Words</h4>
       </div>
-      <div class="modal-body">
+      <div class="modal-body col-sm-4">
         <p id="modal_body"></p>
       </div>
       <div class="modal-footer">
@@ -91,5 +92,4 @@ $this->params['breadcrumbs'][] = $this->title;
       </div>
     </div>
   </div>
-</div>
 </div>

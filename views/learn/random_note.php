@@ -24,7 +24,23 @@ $this->registerJs(
         }
       });"
 );
-
+$this->registerJs('
+  $(".get-word").click(function () {
+  var id = $(this).attr("id");
+            $.ajax({
+              url: "' . \yii\helpers\Url::toRoute(['learn/get-words']) . '",
+                dataType: "html",
+                data: "id="+this.id,
+                success: function(data){
+                    $("#myModal").modal("show");
+                    $("#modal_body").html(data);
+                },
+                error: function () {
+                    $("#conteiner").html("ERROR");
+                }
+            });
+        });
+');
 $this->title = $category->title;
 $this->params['breadcrumbs'][] = ['label' => 'К списку', 'url' => ["/learn?LearnSearch%5Bcategory_id%5D={$category->id}&LearnSearch%5Btitle%5D=&LearnSearch%5Blink%5D=&LearnSearch%5Bcount%5D=&LearnSearch%5Blast_update%5D="]];
 $this->params['breadcrumbs'][] = $this->title;
@@ -46,7 +62,9 @@ foreach (array_slice($dataProvider->models,0,1 ) as $model) {
             echo Html::a($model->getLearn()->title, $model->getLearn()->link, ['target'=>'_blank', 'style' => 'background-color:white']);
         echo "</div>";
         echo "<div class='panel-body'><p>{$model->title}</p>"; 
+        echo "<div id='{$model->id}' class='get-word btn btn-info pull-right'>Получить слова</div>";
         echo Html::a('Редактировать', ['learn/update-note', 'id' => $model->id], ['class'=>'btn btn-danger pull-right', 'target' => '_blank']);
+        echo "</div>";
         echo "</div>";
 }
 ?>
@@ -54,4 +72,22 @@ foreach (array_slice($dataProvider->models,0,1 ) as $model) {
 </div>
 <?=Html::submitButton('Применить', ['class' => 'btn btn-info',]); ?>
 
-<?= Html::endForm(); ?> 
+<?= Html::endForm(); ?>
+ 
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Words</h4>
+      </div>
+      <div class="modal-body col-sm-4">
+        <p id="modal_body"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
