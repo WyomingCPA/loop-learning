@@ -218,22 +218,19 @@ class LearnController extends Controller
     public function actionListNoteCategory()
     {
         $category = LoopCategory::find()->orderBy('parent_id ASC, id ASC')->where(['<>', 'status', '0'])->asArray()->all();
-        $newCategoryList = []; 
-        foreach ($category as $item)
-        {
+        $newCategoryList = [];
+        foreach ($category as $item) {
             $listLearn = LoopLearn::find()->where(['=', 'category_id', $item['id']])->asArray()->all();
             $count_repeat_summ = 0;
-            foreach ($listLearn as $itemLearn)
-            {
+            foreach ($listLearn as $itemLearn) {
                 //$listNote = LoopNote::find()->where(['=', 'learn_id', $itemLearn['id']])->asArray()->all();
                 $countNote = LoopNote::find()->where(['=', 'learn_id', $itemLearn['id']])->sum('count');
-                if (!empty($countNote))
-                {
+                if (!empty($countNote)) {
                     $count_repeat_summ += $countNote;
                 }
             }
             $item['count_repeat_summ'] = $count_repeat_summ;
-            $newCategoryList [] = $item;
+            $newCategoryList[] = $item;
         }
         array_multisort(array_column($newCategoryList, 'count_repeat_summ'), SORT_DESC, $newCategoryList);
         return $this->render('list-note-category', [
@@ -434,7 +431,7 @@ class LearnController extends Controller
             ->where(['is', 'last_update', new \yii\db\Expression('null')])
             ->orWhere(['<=', 'last_update', $delta_from])->one();
 
-        
+
         $queryNotes = $model->getNotes($model->id);
         $provider = new ActiveDataProvider([
             'query' => $queryNotes,
@@ -533,18 +530,22 @@ class LearnController extends Controller
         $str_arr = explode(' ', $text);
         $result = array_unique($str_arr);
         $list_translation = '';
-        foreach ($result as $value)
-        {
+        $count_iterration = 0;
+        foreach ($result as $value) {
             $client = new \GuzzleHttp\Client();
             try {
                 $response = $client->request('GET', 'http://eng.simpleitrunner.ru/api/wordrests/search?word=' . $value);
                 $json = $response->getBody()->getContents();
                 $json_dec = json_decode($json);
-                $list_translation  .= $json_dec[0]->word .' = '.  $json_dec[0]->translation . '</br>';
+                $list_translation  .= "<tr><td><input type='checkbox' id='word' value='1'></td>"
+                    . "<td>" . $count_iterration . "</td><td>" . $json_dec[0]->word . "</td>"
+                    . "<td>" . $json_dec[0]->translation . '</td>'
+                    . "<td>" . $json_dec[0]->last_update . '</td>'
+                    . "<td>" . $json_dec[0]->count . '</td>'
+                    . "</tr>";
+                $count_iterration++;
             } catch (ClientException $e) {
-
             }
-            
         }
         echo $list_translation;
         //echo json_encode(array('status' => $list_translation,));

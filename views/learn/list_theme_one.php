@@ -35,6 +35,33 @@ $this->registerJs('
                 success: function(data){
                     $("#myModal").modal("show");
                     $("#modal_body").html(data);
+                    $("input[type=\"checkbox\"]").click(function(){
+
+                      var thischeck = $(this);
+                
+                      if ( thischeck.is(":checked") ) {
+                
+                          var currentRow = $(this).closest("tr");
+                          var count = currentRow.find("td:eq(5)").text();
+                          thischeck.parents().addClass("danger");
+                          if (count % 5 == 0) {                   
+                              var myVar = setTimeout(myTimer, 30000);
+                          }
+                          else
+                          {                   
+                              var myVar = setTimeout(myTimer, 10000);
+                          }
+                      } else {          
+                         thischeck.parents().removeClass("danger");
+                         thischeck.parents().removeClass("success");
+                      }
+                
+                      function myTimer() {
+                        thischeck.parents().removeClass("danger");             
+                        thischeck.parents().addClass("success");
+                      }
+                
+                    });
                 },
                 error: function () {
                     $("#conteiner").html("ERROR");
@@ -84,8 +111,30 @@ $this->params['breadcrumbs'][] = $this->title;
         <button type="button" class="close" data-dismiss="modal">&times;</button>
         <h4 class="modal-title">Words</h4>
       </div>
-      <div class="modal-body col-sm-4">
-        <p id="modal_body"></p>
+      <div class="modal-body">
+        <table class="table table-condensed">
+          <thead>
+            <tr>
+              <th><input type="checkbox" class="select-on-check-all" name="selection_all" value="1"></th>
+              <th>ID</a></th>
+              <th>Word</a></th>
+              <th>Translation</th>
+              <th>Last Update</th>
+              <th>Count</th>
+            </tr>
+          </thead>
+          <tbody id="modal_body">
+            <tr data-key="793">
+              <td><input type="checkbox" id="word"></td>
+              <td>793</td>
+              <td>everywhere</td>
+              <td>везде</td>
+              <td>2022-01-31 11:07:27</td>
+              <td>1</td>
+            </tr>
+          </tbody>
+        </table>
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
