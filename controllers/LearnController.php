@@ -530,6 +530,7 @@ class LearnController extends Controller
         $str_arr = explode(' ', $text);
         $result = array_unique($str_arr);
         $list_translation = '';
+        $list_not_found_translation = '';
         $count_iterration = 0;
         foreach ($result as $value) {
             $client = new \GuzzleHttp\Client();
@@ -545,9 +546,14 @@ class LearnController extends Controller
                     . "</tr>";
                 $count_iterration++;
             } catch (ClientException $e) {
+                $list_not_found_translation  .= "<tr class='bg-info'><td><input type='checkbox' id='word' value='1'></td>"
+                    . "<td>" . $count_iterration . "</td><td>" . $value . "</td>"
+                    . "<td>-</td>"
+                    . "<td>-</td>"
+                    . "<td>-</td></tr>";
             }
         }
-        echo $list_translation;
+        echo $list_translation . $list_not_found_translation;
         //echo json_encode(array('status' => $list_translation,));
     }
 
