@@ -128,7 +128,8 @@ class LearnController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
-
+        $model = LoopNote::findOne((int)$id);
+        $model->delete();
         return $this->redirect(['index']);
     }
 
